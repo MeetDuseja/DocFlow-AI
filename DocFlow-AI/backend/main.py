@@ -6,6 +6,8 @@ from typing import Optional
 from pydantic import BaseModel
 import json, os, shutil, uuid
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+
 
 load_dotenv()
 
@@ -15,13 +17,14 @@ from validation import validate_record
 
 app = FastAPI()
 
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://vercel.app"], # Replace with your exact production frontend URL
+    allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
-
 os.makedirs("documents", exist_ok=True)
 app.mount("/documents", StaticFiles(directory="documents"), name="documents")
 
